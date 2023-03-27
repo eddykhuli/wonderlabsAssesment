@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="css/myStyle.css">
+
+    <style type="text/css">
+        label {
+            display: inline-block;
+            width: 200px;
+            margin: 5px;
+            text-align: left;
+        }
+        input[type=text], input[type=password], select {
+            display: inline-block;
+            width: 200px;
+        }
+        input[type=radio] {
+            margin-left: 45px;
+        }
+        input[type=checkbox] {
+            margin-right: 190px;
+        }
+        button {
+            padding: 5px;
+            margin: 10px;
+        }
+    </style>
+
+    <script>
+
+        function showOverdraftField(){
+            document.getElementById("overdraftField").style.display = "block";
+
+        }
+
+        function showOverdraftSection(){
+            var e = document.getElementById("accountType");
+            var value = e.value;
+
+            if(value === 'Savings Account'){
+                document.getElementById("deposit").style.display = "block";
+                document.getElementById("overdraft").style.display = "none";
+            }else {
+                document.getElementById("overdraft").style.display = "block";
+                document.getElementById("deposit").style.display = "none";
+
+            }
+        }
+    </script>
+</head>
+<body>
+<div align="center">
+    <h1>User Registration</h1>
+    <form action="#" th:action="@{/register}" method="post" th:object="${account}">
+        <label>Account Holder Names:</label>
+        <input type="text" th:field="*{accountHolderName}" /><br/>
+
+        <label>Account Type:</label>
+        <select id="accountType" th:field="*{accountType}" onchange="showOverdraftSection()">
+            <option value="" selected>Select Account Type</option>
+            <option th:each="p : ${accountTypes}" th:value="${p}" th:text="${p}"  />
+        </select>
+        <p th:text="${errorMessage}" th:if="${errorMessage ne null}" class="alert alert-primary"></p>
+
+        <div id="deposit" style="display: none">
+
+                <label for="depositField">Deposit (Must be above R1000)</label>
+                <input id="depositField" placeholder="Enter Deposit amount" required type="text"
+                       class="form-control" th:field="*{transactionAmount}"/>
+            <!--</div>-->
+        </div>
+        <div id="overdraft" style="display: none">
+            <div class="form-check">
+                <label>Would you like an overdraft?</label>
+                <p>(Leave unselected if you do not wish to add an overdraft)</p>
+                <input type="radio" class="form-check-input" id="radio1" name="optradio" value="overdraft" th:field="*{overDraft}" onclick="showOverdraftField()">
+            </div>
+            <div id="overdraftField" class="form-group col-md-6" style="display: none">
+                <label for="overdraftField1">Enter Overdraft amount</label>
+                <input id="overdraftField1" placeholder="Enter Overdraft amount" required type="text"
+                       class="form-control" th:field="*{overdraftAmount}"/>
+            </div>
+        </div>
+        <br/>
+        <label>Password:</label>
+        <input type="password"  th:field="*{password}" /><br/>
+
+        <!--<label>Married?</label>-->
+        <!--<input type="checkbox" th:field="*{married}" /><br/>-->
+
+        <!--<label>Note:</label>-->
+        <!--<textarea rows="5" cols="25" th:field="*{note}"></textarea>-->
+        <br/>
+
+        <button type="submit" class="btn btn-primary col-md-6">Open Account</button>
+    </form>
+</div>
+</body>
+</html>
