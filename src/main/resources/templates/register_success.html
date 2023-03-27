@@ -78,7 +78,7 @@
                         </button>
 
                         <div id="transactions" class="collapse">
-                            <table class="table table-bordered table-striped mb-0">
+                            <table  th:if="${ not#lists.isEmpty(account.transactionHistory)}" class="table table-bordered table-striped mb-0">
                                 <thead class="thead-dark" >
                                 <tr>
                                     <th scope="col">Transaction Date</th>
@@ -97,7 +97,10 @@
                                 </tr>
                                 </tbody>
                             </table>
+
+                            <h3 th:if="${ #lists.isEmpty(account.transactionHistory)}">No Transactions yet</h3>
                         </div>
+
                     </tr>
                 </div>
             </div>
